@@ -7,6 +7,8 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
+from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -25,12 +27,15 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         # 创建一个用于存储游戏统计信息的实例
         self.stats = GameStats(self)
-
+        # 创建记分牌
+        self.sb = Scoreboard(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+        # 创建play按钮
+        self.play_button = Button(self, "Play")
 
         self.bg_color = (230, 230, 230)
 
@@ -54,6 +59,26 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            # 重置游戏设置
+            self.settings.initialize_dynamic_settings()
+            self.stats.reset_stats()
+            self.stats.game_active = True
+
+            self.aliens.empty()
+            self.bullets.empty()
+
+            self._create_fleet()
+            self.ship.center_ship()
+            # 隐藏鼠标光标
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -96,6 +121,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """更新外星人位置"""
@@ -163,6 +189,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         """检查是否有外星人到达屏幕底端"""
@@ -180,6 +207,12 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
 
+        # 显示得分
+        self.sb.show_score()
+
+        # 如果游戏在非活动状态就显示按钮
+        if not self.stats.game_active:
+            self.play_button.draw_button()
         pygame.display.flip()
 
 
