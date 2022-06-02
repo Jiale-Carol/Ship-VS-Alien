@@ -15,8 +15,8 @@ class Settings:
         self.ship_speed = 1.5  # 定义飞船移动速度
 
         '子弹设置'
-        self.bullet_speed = 1  # 定义子弹的速度
-        self.bullet_allowed = 10  # 定义允许发射的子弹数量
+        self.bullet_speed = 1.0  # 定义子弹的速度
+        self.bullets_allowed = 3  # 定义允许发射的子弹数量
         self.bullet_width = 3  # 子弹宽
         self.bullet_height = 15  # 子弹高
         self.bullet_color = (60, 60, 60)  # 子弹颜色
