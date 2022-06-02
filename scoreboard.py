@@ -47,7 +47,12 @@ class Scoreboard:
         self.high_score_rect.top = self.score_rect.top
 
     def check_high_score(self):
+        """如果超越最高分,将被写入文件"""
+        filename = 'highest_score.txt'
         if self.stats.score > self.stats.high_score:
+            # 写入文件
+            with open(filename, 'w') as file_object:
+                file_object.write(str(self.stats.score))
             self.stats.high_score = self.stats.score
             self.prep_high_score()
 

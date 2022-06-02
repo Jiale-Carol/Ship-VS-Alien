@@ -253,8 +253,6 @@ class AlienInvasion:
         if not self.stats.game_active:
             self.play_button.draw_button()
 
-
-
         pygame.display.flip()
 
 
