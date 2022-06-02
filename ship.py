@@ -1,14 +1,15 @@
 # @Author : dcg
 
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     """飞船类"""
 
     def __init__(self, ai_game):
         """初始化飞船"""
-        # super().__init__()
+        super().__init__()
         # 获取屏幕对象
         self.screen = ai_game.screen
         self.settings = ai_game.settings
