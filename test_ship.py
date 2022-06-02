@@ -11,7 +11,7 @@ class TestMove(unittest.TestCase):
     def test_left_move(self):
         # 飞船左移测试
         ship = Ship(AlienInvasion())
-        ship.move_left = True
+        ship.moving_left = True
         ship.move()
         # 飞船坐标小于屏幕底部中心坐标
         self.assertLess(ship.rect.midbottom, ship.screen_rect.midbottom)
@@ -19,7 +19,7 @@ class TestMove(unittest.TestCase):
     def test_right_move(self):
         # 飞船右移测试
         ship = Ship(AlienInvasion())
-        ship.move_right = True
+        ship.moving_right = True
         ship.move()
         # 飞船坐标大于屏幕底部中心坐标
         self.assertGreater(ship.rect.midbottom, ship.screen_rect.midbottom)

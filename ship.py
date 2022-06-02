@@ -44,10 +44,10 @@ class Ship(Sprite):
 
     def move(self):
         """根据移动开关调整飞船位置"""
-        if self.move_right and self.rect.right < self.screen_rect.right:
-            self.x += self.setting.ship_speed
-        if self.move_left and self.rect.left > 0:
-            self.x -= self.setting.ship_speed
+        if self.moving_right and self.rect.right < self.screen_rect.right:
+            self.x += self.settings.ship_speed
+        if self.moving_left and self.rect.left > 0:
+            self.x -= self.settings.ship_speed
         self.rect.x = self.x
 
     def center_ship(self):
