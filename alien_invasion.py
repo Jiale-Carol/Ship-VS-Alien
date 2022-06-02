@@ -2,6 +2,7 @@
 
 import sys
 from time import sleep
+from random import randint
 
 import pygame
 
@@ -12,6 +13,7 @@ from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from star import Star
 
 
 class AlienInvasion:
@@ -29,11 +31,17 @@ class AlienInvasion:
         self.stats = GameStats(self)
         # 创建记分牌
         self.sb = Scoreboard(self)
+
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+
+        # 创建修星星们
+        self.stars = pygame.sprite.Group()
+        self._create_stars()
+
         # 创建play按钮
         self.play_button = Button(self, "Play")
 
@@ -122,7 +130,7 @@ class AlienInvasion:
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
-            #self.stats.score += self.settings.alien_points
+            # self.stats.score += self.settings.alien_points
             self.sb.prep_score()
             self.sb.check_high_score()
         if not self.aliens:
@@ -171,6 +179,23 @@ class AlienInvasion:
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
 
+    def _create_stars(self):
+        """创建修星星群"""
+        star = Star(self)
+        available_space_x = 1200 - star.rect.width
+        number_stars_x = int(available_space_x / (2 * star.rect.width))
+        available_space_y = 800 - star.rect.height
+        number_stars_row = int(available_space_y / (2 * star.rect.height))
+        for row_number in range(number_stars_row):
+            for star_number in range(number_stars_x):
+                star = Star(self)
+                star_width = star.rect.width
+                star.x = randint(-1, 1) * star_width + 2 * star_width * star_number
+                star.rect.x = star.x
+                star.rect.y = randint(-1, 1) * star.rect.height + 2 * star.rect.height * row_number
+                star.blitme()
+                self.stars.add(star)
+
     def _check_fleet_edges(self):
         """有外星人到达边缘时采取相应措施"""
         for alien in self.aliens.sprites():
@@ -213,6 +238,9 @@ class AlienInvasion:
     def _update_screen(self):
 
         self.screen.fill(self.settings.bg_color)
+        # 绘制修星星
+        self.stars.draw(self.screen)
+
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
@@ -224,6 +252,9 @@ class AlienInvasion:
         # 如果游戏在非活动状态就显示按钮
         if not self.stats.game_active:
             self.play_button.draw_button()
+
+
+
         pygame.display.flip()
 
 
