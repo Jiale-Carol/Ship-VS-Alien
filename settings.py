@@ -12,7 +12,7 @@ class Settings:
 
         '飞船设置'
         self.ship_limit = 4  # 定义生命数量
-        self.ship_speed = 1  # 定义飞船移动速度
+        self.ship_speed = 1.5  # 定义飞船移动速度
 
         '子弹设置'
         self.bullet_speed = 1  # 定义子弹的速度
